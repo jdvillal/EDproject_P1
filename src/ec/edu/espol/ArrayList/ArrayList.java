@@ -5,6 +5,7 @@ import java.util.Iterator;
 /**
  *
  * @author Jorge Villalta
+ * @param <E>
  */
 public class ArrayList<E> implements List<E>{
     private E[] array;
@@ -27,7 +28,6 @@ public class ArrayList<E> implements List<E>{
         }else if (capacity == effectiveSize){
             addCapacity();
         }
-        
         for(int i = effectiveSize -1 ; i >= 0; i-- ){
             array[i+1] = array[i];
         }
@@ -45,7 +45,6 @@ public class ArrayList<E> implements List<E>{
         }else if(effectiveSize == capacity){
             addCapacity();
         }
-        
         array[effectiveSize++] = element;
         return true;
     }
@@ -58,7 +57,7 @@ public class ArrayList<E> implements List<E>{
         array = tmp;
         capacity = capacity*2;
     }
-
+    
     @Override
     public E getFirst() {
         return array[0];

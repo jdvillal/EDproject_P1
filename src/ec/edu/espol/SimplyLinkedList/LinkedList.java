@@ -3,31 +3,34 @@ package ec.edu.espol.SimplyLinkedList;
 import ec.edu.espol.List.List;
 import java.util.Iterator;
 
-
 /**
  *
  * @author Jorge Villalta
  * @param <E>
  */
-public class LinkedList <E> implements List<E> {
+public class LinkedList<E> implements List<E> {
+
     private Node<E> first, last;
     private int effectiveSize;
-    
-    public LinkedList(){
-        first = last = null;
+
+    public LinkedList() {
+        first = null;
+        last = null;
         effectiveSize = 0;
     }
-    
+
     @Override
     public boolean addFirst(E element) {
-        Node<E> nodo = new Node<>(element);
-        if(element == null)
+        Node<E> newNode = new Node<>(element);
+        if (element == null) {
             return false;
-        else if(isEmpty())
-            first = last = nodo;
-        else{
-            nodo.setNext(first);
-            first = nodo;
+        } else if (isEmpty()) {
+            first = newNode;
+            last = newNode;
+        } else {
+            Node<E> temp = this.first;
+            this.first = newNode;
+            this.first.setNext(temp);
         }
         effectiveSize++;
         return true;
@@ -35,17 +38,17 @@ public class LinkedList <E> implements List<E> {
 
     @Override
     public boolean addLast(E element) {
-        Node<E> nodo = new Node<>(element);
-        if(element == null)
+        Node<E> newNode = new Node(element);
+        if (element == null) {
             return false;
-        else if(isEmpty())
-            first = last = nodo;
-        else{
-            last.setNext(nodo);
-            last = nodo;
+        } else if (isEmpty()) {
+            this.first = newNode;
+            this.last = newNode;
+        } else {
+            this.last.setNext(newNode);
+            this.last = newNode; 
         }
-        
-        effectiveSize ++;
+        effectiveSize++;
         return true;
     }
 
@@ -59,41 +62,32 @@ public class LinkedList <E> implements List<E> {
         return last.getData();
     }
 
-   
     @Override
     public boolean isEmpty() {
-        return (first == null && last == null);
+        return (this.effectiveSize == 0);
     }
 
     @Override
     public int size() {
         return effectiveSize;
     }
-    
-    public Node getFirstNode () {
-        return first;
-    }
-    
-    public Node getLastNode () {
-        return last;
-    }
-    
-    private Node<E> getNode(int index){
+
+    private Node<E> getNode(int index) {
         Node<E> currentNode = this.first;
-        for(int i = 0; i < index; i++){
+        for (int i = 0; i < index; i++) {
             currentNode = currentNode.getNext();
         }
         return currentNode;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         //return "Implemente este método!";
         String str = null;
-        for(int i = 0; i < effectiveSize; i++){
-            if(i==0){
+        for (int i = 0; i < effectiveSize; i++) {
+            if (i == 0) {
                 str = getNode(i).getData().toString();
-            }else{
+            } else {
                 str = str + "," + getNode(i).getData().toString();
             }
         }
@@ -102,38 +96,92 @@ public class LinkedList <E> implements List<E> {
 
     @Override
     public boolean removeFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.effectiveSize != 0) {
+            Node<E> nod = this.first.getNext();
+            this.first = nod;
+            this.effectiveSize--;
+            return true;
+        } else {
+            return false;
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean removeLast() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.effectiveSize != 0) {
+            Node<E> nod = getNode(this.effectiveSize - 1);
+            this.last = nod;
+            this.last.setNext(null);
+            this.effectiveSize--;
+            return true;
+        } else {
+            return false;
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean insert(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(element == null){
+            return false;
+        }else{
+            if(index == 0){
+                addFirst(element);
+            }else if(index == this.effectiveSize){
+                addLast(element);
+            }else{
+                Node<E> lastNode = getNode(index-1);
+                Node<E> nextNode = getNode(index);
+                Node<E> newNode = new Node(element);
+                newNode.setNext(nextNode);
+                lastNode.setNext(newNode);
+                this.effectiveSize++;
+            }
+            return true;
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean contains(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Node<E> currentNode = this.first;
+        for (int i = 0; i < this.effectiveSize; i++) {
+            if (currentNode.getData().equals(element)) {
+                return true;
+            }
+            currentNode = currentNode.getNext();
+        }
+        return false;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public E get(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
+        return getNode(index).getData();
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
     public int indexOf(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(int i = 0; i < effectiveSize;i++){
+            if(getNode(i).getData().equals(element)){
+                return i;
+            }
+        }
+        return -1;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public E remove(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Node<E> toRemoveNode = getNode(index);
+        Node<E> lastNode = getNode(index-1);
+        Node<E> nextNode = getNode(index+1);
+        lastNode.setNext(nextNode);
+        return toRemoveNode.getData();
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -148,16 +196,18 @@ public class LinkedList <E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-    
-            return  new Iterator<E>(){
+
+        return new Iterator<E>() {
             int pos = 0;
+
             @Override
-            public boolean hasNext(){
+            public boolean hasNext() {
                 return pos < effectiveSize;
             }
+
             @Override
-            public E next(){
-                return getNode(pos++).getData(); 
+            public E next() {
+                return getNode(pos++).getData();
             }
         };
     }
