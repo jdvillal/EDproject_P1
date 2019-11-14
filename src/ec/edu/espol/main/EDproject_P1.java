@@ -5,6 +5,7 @@
  */
 package ec.edu.espol.main;
 
+import customPane.CircularPane;
 import javafx.application.Application;
 
 import ec.edu.espol.List.List;
@@ -25,20 +26,17 @@ public class EDproject_P1 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+        CircularPane cp = new CircularPane();
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        for (int i = 0; i < 30; i++) {
+            Button btn = new Button();
+            btn.setText(Integer.toString(i));
+            cp.getChildren().add(btn);
+        }
 
-        Scene scene = new Scene(root, 300, 250);
+
+        Scene scene = new Scene(cp, 300, 250);
 
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
@@ -49,7 +47,6 @@ public class EDproject_P1 extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
 
         launch(args);
 
