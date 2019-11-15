@@ -12,10 +12,13 @@ import ec.edu.espol.List.List;
 import ec.edu.espol.SimplyLinkedList.LinkedList;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -26,21 +29,12 @@ public class EDproject_P1 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        
 
-        CircularPane cp = new CircularPane();
-
-        for (int i = 0; i < 30; i++) {
-            Button btn = new Button();
-            btn.setText(Integer.toString(i));
-            cp.getChildren().add(btn);
-        }
-
-
-        Scene scene = new Scene(cp, 300, 250);
-
+        PaneOrganizer pn = new PaneOrganizer(primaryStage);
+        pn.drawControlPane();
         primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
     }
 
     /**
@@ -51,5 +45,6 @@ public class EDproject_P1 extends Application {
         launch(args);
 
     }
+
 
 }
