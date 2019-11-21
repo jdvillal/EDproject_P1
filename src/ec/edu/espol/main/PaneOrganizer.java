@@ -16,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -31,19 +33,25 @@ class PaneOrganizer {
     private Stage stage = null;
     private int circleSize;
     private GridPane mainPane;
+    private CircularPane currentCircle;
 
     public PaneOrganizer(Stage st) {
-        this.circleSize = 30;
+        this.circleSize = 31;
         this.stage = st;
         this.mainPane = new GridPane();
     }
 
     public void drawControlPane() {
         Label titleLbl = new Label("Parametros de simulación");
-        titleLbl.setFont(new Font("Tahoma",30));
+        titleLbl.setFont(new Font("Tahoma", 30));
         Label circleSizeLbl = new Label("No de soldados");
         TextField circleSizeTF = new TextField();
+        circleSizeTF.setMaxWidth(40);
         Button applySizeBtn = new Button("Apply");
+        EventHandler apply = (EventHandler) (Event event) -> {
+            cPane(Integer.valueOf(circleSizeTF.getText()));
+        };
+        applySizeBtn.setOnMouseClicked(apply);
         HBox sizeCtrlPane = new HBox();//HBOX
         sizeCtrlPane.setSpacing(10);
         sizeCtrlPane.getChildren().add(circleSizeLbl);
@@ -64,8 +72,9 @@ class PaneOrganizer {
 
         Label startIndexLbl = new Label("Iniciar ejecucion en: ");
         TextField startIndexTF = new TextField();
-        Button csRotBtn = new Button("-->");
-        Button usRotBtn = new Button("<--");
+        startIndexTF.setMaxWidth(40);
+        Button csRotBtn = new Button("->");
+        Button usRotBtn = new Button("<-");
 
         HBox siCtrlPane = new HBox(); //HBOX
         siCtrlPane.setSpacing(10);
@@ -76,9 +85,10 @@ class PaneOrganizer {
 
         Button pauseBtn = new Button("▶ ||");
         Button stopBtn = new Button("■");
-        Button startBtn = new Button("Start simulation");
+        Button startBtn = new Button("Start");
         HBox timeCtrlPane = new HBox(); //HBox
         timeCtrlPane.setSpacing(circleSize);
+        timeCtrlPane.setAlignment(Pos.CENTER);
         timeCtrlPane.getChildren().add(pauseBtn);
         timeCtrlPane.getChildren().add(stopBtn);
         timeCtrlPane.getChildren().add(startBtn);
@@ -91,29 +101,40 @@ class PaneOrganizer {
         controlPane.getChildren().add(siCtrlPane);
         controlPane.getChildren().add(timeCtrlPane);
         controlPane.setSpacing(20);
-        
 
-        CircularPane cp = fixCircle(30);
+        currentCircle = fixCircle(this.circleSize);
 
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setHgap(100);
         mainPane.setVgap(40);
         mainPane.add(controlPane, 4, 0);
-        mainPane.add(cp, 0, 0);
+        mainPane.add(currentCircle, 0, 0);
 
-        Scene sc = new Scene(mainPane, 1200, 700);
+        Scene sc = new Scene(mainPane, 1500, 900);
 
         this.stage.setScene(sc);
         this.stage.show();
     }
 
     private CircularPane fixCircle(int size) {
+        Image imProfile = new Image(getClass().getResourceAsStream("vivo.png"));
         CircularPane cp = new CircularPane();
         for (int i = 0; i < size; i++) {
-            Button btn = new Button(String.valueOf(i));
-            cp.getChildren().add(btn);
+            ImageView imV = new ImageView(imProfile);
+            imV.setScaleX(0.5); imV.setScaleY(0.5);
+            //Button btn = new Button(String.valueOf(i));
+            cp.getChildren().add(imV);
         }
+        //cp.dibujar();
         return cp;
     }
+
+    private void cPane(int newSize) {
+        this.mainPane.getChildren().removeAll(currentCircle);
+        this.currentCircle = fixCircle(newSize);
+        this.mainPane.add(currentCircle, 0, 0);
+    }
+
+    
 
 }

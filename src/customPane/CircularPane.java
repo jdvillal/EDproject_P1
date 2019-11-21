@@ -8,38 +8,35 @@ package customPane;
  *
  * @author danie
  */
+import java.util.List;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public class CircularPane extends Pane {
-
-    private double degreese;
-    private double increment;
-    public  void rotate(int a) {
-        if (a == 1) {
-            this.degreese = this.degreese + increment;
-
-        } else if (a == -1) {
-            this.degreese = this.degreese - increment;
-        }
-        layoutChildren();
-    }
+    private long degreese = 0;
+    private long increment;
     
-    public void actualizar(){
+    public void dibujar(){
         layoutChildren();
     }
 
     @Override
     protected void layoutChildren() {
-        int radius = 200;
-        increment = 360 / getChildren().size();
+        final int radius = 250;
+        final double increment = 360 / getChildren().size();
+        double degreese = 0;
         for (Node node : getChildren()) {
-            double x = radius * Math.cos(Math.toRadians(this.degreese)) + getWidth() / 2;
-            double y = radius * Math.sin(Math.toRadians(this.degreese)) + getHeight() / 2;
+            double x = radius * Math.cos(Math.toRadians(degreese)) + getWidth() / 2;
+            double y = radius * Math.sin(Math.toRadians(degreese)) + getHeight() / 2;
             layoutInArea(node, x - node.getBoundsInLocal().getWidth() / 2, y - node.getBoundsInLocal().getHeight() / 2, getWidth(), getHeight(), 0.0, HPos.LEFT, VPos.TOP);
             degreese += increment;
         }
+  
     }
+ 
+    
+    
+    
 }
