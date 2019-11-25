@@ -7,46 +7,41 @@ package ec.edu.espol.CircularDoublyLinkedList;
 
 /**
  *
- * @author Jorge Villalta
- * @param <E>
+ * @author danie
  */
 public class Node<E> {
-    private Node<E> lastNode;
-    private Node<E> nextNode;
     private E element;
+    private Node last=null;
+    private Node next=null;
 
-    public Node(Node<E> lastNode, Node<E> nextNode, E element) {
-        this.lastNode = lastNode;
-        this.nextNode = nextNode;
+    public Node() {
+    }
+    public Node(E element){
         this.element = element;
-    }
-
-    public Node<E> getLastNode() {
-        return lastNode;
-    }
-
-    public Node<E> getNextNode() {
-        return nextNode;
     }
 
     public E getElement() {
         return element;
     }
 
-    public void setLastNode(Node<E> lastNode) {
-        this.lastNode = lastNode;
+    public Node getLast() {
+        return last;
     }
 
-    public void setNextNode(Node<E> nextNode) {
-        this.nextNode = nextNode;
+    public Node getNext() {
+        return next;
     }
 
     public void setElement(E element) {
         this.element = element;
     }
-    
-    
-    
-    
+
+    public void setLast(Node last) {
+        this.last = last;
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
     
 }

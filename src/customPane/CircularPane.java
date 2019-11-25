@@ -15,17 +15,18 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public class CircularPane extends Pane {
-    private long degreese = 0;
-    private long increment;
+    private int radius;
     
-    public void dibujar(){
+    public CircularPane(int radius){
+        this.radius = radius;
+    }
+    public void update(){
         layoutChildren();
     }
 
     @Override
     protected void layoutChildren() {
-        final int radius = 250;
-        final double increment = 360 / getChildren().size();
+        final double increment = 360d / getChildren().size();
         double degreese = 0;
         for (Node node : getChildren()) {
             double x = radius * Math.cos(Math.toRadians(degreese)) + getWidth() / 2;
@@ -33,10 +34,6 @@ public class CircularPane extends Pane {
             layoutInArea(node, x - node.getBoundsInLocal().getWidth() / 2, y - node.getBoundsInLocal().getHeight() / 2, getWidth(), getHeight(), 0.0, HPos.LEFT, VPos.TOP);
             degreese += increment;
         }
-  
-    }
- 
-    
-    
+    } 
     
 }

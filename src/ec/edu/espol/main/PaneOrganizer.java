@@ -33,7 +33,8 @@ class PaneOrganizer {
     private Stage stage = null;
     private int circleSize;
     private GridPane mainPane;
-    private CircularPane currentCircle;
+    //private CircularPane currentCircle;
+    private Circulo circle;
 
     public PaneOrganizer(Stage st) {
         this.circleSize = 31;
@@ -49,7 +50,7 @@ class PaneOrganizer {
         circleSizeTF.setMaxWidth(40);
         Button applySizeBtn = new Button("Apply");
         EventHandler apply = (EventHandler) (Event event) -> {
-            cPane(Integer.valueOf(circleSizeTF.getText()));
+            updatePane(Integer.valueOf(circleSizeTF.getText()));
         };
         applySizeBtn.setOnMouseClicked(apply);
         HBox sizeCtrlPane = new HBox();//HBOX
@@ -57,6 +58,7 @@ class PaneOrganizer {
         sizeCtrlPane.getChildren().add(circleSizeLbl);
         sizeCtrlPane.getChildren().add(circleSizeTF);
         sizeCtrlPane.getChildren().add(applySizeBtn);
+        //sizeCtrlPane.setAlignment(Pos.CENTER_RIGHT);
 
         Label senseLbl = new Label("Sentido de la ejecucion: ");
         ToggleGroup sentidoTG = new ToggleGroup();
@@ -69,6 +71,7 @@ class PaneOrganizer {
         senseCtrlPane.getChildren().add(senseLbl);
         senseCtrlPane.getChildren().add(horarioRB);
         senseCtrlPane.getChildren().add(antihorarioRB);
+        //senseCtrlPane.setAlignment(Pos.CENTER_RIGHT);
 
         Label startIndexLbl = new Label("Iniciar ejecucion en: ");
         TextField startIndexTF = new TextField();
@@ -82,19 +85,29 @@ class PaneOrganizer {
         siCtrlPane.getChildren().add(startIndexTF);
         siCtrlPane.getChildren().add(usRotBtn);
         siCtrlPane.getChildren().add(csRotBtn);
+        //siCtrlPane.setAlignment(Pos.CENTER_RIGHT);
 
         Button pauseBtn = new Button("▶ ||");
         Button stopBtn = new Button("■");
         Button startBtn = new Button("Start");
+        EventHandler startEv = (EventHandler) (Event event) -> {
+            System.out.println("Start pressed");
+            try {
+                this.circle.start();
+                
+            } catch (Exception e) {
+            }
+        };
+        startBtn.setOnMouseClicked(startEv);
         HBox timeCtrlPane = new HBox(); //HBox
-        timeCtrlPane.setSpacing(circleSize);
-        timeCtrlPane.setAlignment(Pos.CENTER);
+        timeCtrlPane.setSpacing(10);
+        //timeCtrlPane.setAlignment(Pos.CENTER_RIGHT);
         timeCtrlPane.getChildren().add(pauseBtn);
         timeCtrlPane.getChildren().add(stopBtn);
         timeCtrlPane.getChildren().add(startBtn);
 
         VBox controlPane = new VBox();
-        //controlPane.setAlignment(Pos.CENTER);
+        controlPane.setAlignment(Pos.CENTER);
         controlPane.getChildren().add(titleLbl);
         controlPane.getChildren().add(sizeCtrlPane);
         controlPane.getChildren().add(senseCtrlPane);
@@ -102,13 +115,11 @@ class PaneOrganizer {
         controlPane.getChildren().add(timeCtrlPane);
         controlPane.setSpacing(20);
 
-        currentCircle = fixCircle(this.circleSize);
-
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setHgap(100);
         mainPane.setVgap(40);
         mainPane.add(controlPane, 4, 0);
-        mainPane.add(currentCircle, 0, 0);
+        updatePane(30);
 
         Scene sc = new Scene(mainPane, 1500, 900);
 
@@ -116,25 +127,18 @@ class PaneOrganizer {
         this.stage.show();
     }
 
-    private CircularPane fixCircle(int size) {
-        Image imProfile = new Image(getClass().getResourceAsStream("vivo.png"));
-        CircularPane cp = new CircularPane();
-        for (int i = 0; i < size; i++) {
-            ImageView imV = new ImageView(imProfile);
-            imV.setScaleX(0.5); imV.setScaleY(0.5);
-            //Button btn = new Button(String.valueOf(i));
-            cp.getChildren().add(imV);
+    private void updatePane(int newSize) {
+        if (this.circle != null) {
+            this.mainPane.getChildren().removeAll(circle.getCharactersPane());
+            this.mainPane.getChildren().removeAll(circle.getNumerosPane());
         }
-        //cp.dibujar();
-        return cp;
+        updateCircle(newSize);
+        this.mainPane.add(this.circle.getCharactersPane(), 0, 0);
+        this.mainPane.add(this.circle.getNumerosPane(), 0, 0);
     }
 
-    private void cPane(int newSize) {
-        this.mainPane.getChildren().removeAll(currentCircle);
-        this.currentCircle = fixCircle(newSize);
-        this.mainPane.add(currentCircle, 0, 0);
+    private void updateCircle(int newSize) {
+        this.circle = new Circulo(newSize);
     }
-
-    
 
 }

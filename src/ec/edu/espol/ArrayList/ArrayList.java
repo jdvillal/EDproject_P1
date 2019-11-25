@@ -146,7 +146,6 @@ public class ArrayList<E> implements List<E>{
 
     @Override
     public Iterator<E> iterator() {
-    
             return  new Iterator<E>(){
             int pos = 0;
             @Override
