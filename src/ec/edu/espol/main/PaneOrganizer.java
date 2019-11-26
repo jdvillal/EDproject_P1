@@ -91,10 +91,22 @@ class PaneOrganizer {
         Button stopBtn = new Button("■");
         Button startBtn = new Button("Start");
         EventHandler startEv = (EventHandler) (Event event) -> {
+            if ("".equals(startIndexTF.getText())) {
+                this.circle.setStartKiller(1);
+            } else {
+                this.circle.setStartKiller(Integer.valueOf(startIndexTF.getText()));
+            }
+            if (horarioRB.isSelected()) {
+                System.out.println("1111");
+                this.circle.setKillSense(1);
+            } else if (antihorarioRB.isSelected()) {
+                System.out.println("0000");
+                this.circle.setKillSense(-1);
+            }
             System.out.println("Start pressed");
             try {
                 this.circle.start();
-                
+
             } catch (Exception e) {
             }
         };

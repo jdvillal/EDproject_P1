@@ -14,8 +14,8 @@ import javafx.scene.image.ImageView;
  * @author danie
  */
 public class Persona {
-    private final Image imAlife = new Image(getClass().getResourceAsStream("vivo.png"));
-    private final Image imDead = new Image(getClass().getResourceAsStream("muerto.png"));
+    private final Image imAlife = new Image(getClass().getResourceAsStream("alife.png"));
+    private final Image imDead = new Image(getClass().getResourceAsStream("dead.png"));
     private ImageView currentImv = new ImageView(imAlife);
     private Label posicionLbl;
     private boolean vivo;
@@ -58,5 +58,29 @@ public class Persona {
         this.currentImv.setImage(imDead);
         this.vivo = false;
     }
+    
+    public Persona checkLastAlife(CircularDoublyLinkedList<Persona> cl){
+        cl.setItr(cl.getIndex(this)-1);
+        for(int i = 0; i < cl.size() ; i++){
+            Persona p = cl.getPrevE();
+            if(p.isAlife() && !p.equals(this)){
+                return p;
+            }       
+        }
+        return null;
+    }
+    
+    public Persona checkNextAlife(CircularDoublyLinkedList<Persona> cl){
+        cl.setItr(cl.getIndex(this)+1);
+        for(int i = 0; i < cl.size() ; i++){
+            Persona p = cl.getNextE();
+            if(p.isAlife() && !p.equals(this)){
+                return p;
+            }       
+        }
+        return null;
+    }
+    
+    
     
 }

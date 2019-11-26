@@ -6,8 +6,7 @@
 package ec.edu.espol.main;
 
 import customPane.CircularPane;
-import ec.edu.espol.CircularDoublyLinkedList.CircularDoublyLinkedList;
-import ec.edu.espol.CircularDoublyLinkedList.CircularDoublyLinkedList;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -22,13 +21,17 @@ public class Circulo<E> extends Thread {
     private int milliseconds;
     private CircularPane numerosPane;
     private CircularPane charactersPane;
-    private CircularDoublyLinkedList<Persona> listaPersonas;
+    private CircularDoublyLinkedList<Persona> listaPersonas = new CircularDoublyLinkedList();
+    private boolean horario;
+    private int startKiller;
 
     public Circulo(int size) {
-        milliseconds = 1500;
+        startKiller = 0;
+        milliseconds = 500;
+        horario = true;
         numerosPane = new CircularPane(360);
         charactersPane = new CircularPane(320);
-        listaPersonas = new CircularDoublyLinkedList();
+        //listaPersonas = new CircularDoublyLinkedList();
         this.size = size;
         for (int i = 1; i <= size; i++) {
             Persona nPersona = new Persona(i);
@@ -37,23 +40,51 @@ public class Circulo<E> extends Thread {
             charactersPane.getChildren().add(nPersona.getCharacterImage());
         }
     }
+    
+    public void setStartKiller(int posicion){
+        this.startKiller = posicion;
+    }
 
     @Override
     public void run() {
-        try {
-            System.out.println("La simulacion ha empezado");
-            int deadsNumber = 0;
-            Persona personItr = this.listaPersonas.get(0);
-            while (deadsNumber != this.size) {
-                System.out.println(personItr.getPosicion());
-                Persona toKill = getNextAlive(personItr);
-                toKill.kill();
-                deadsNumber++;
-                personItr = getNextAlive(toKill);
-                this.charactersPane.update();
-                sleep(milliseconds);
+        System.out.println(this.horario);
+        System.out.println("La simulacion ha empezado");
+        int deadsNumber = 0;
+        Persona personItr = this.listaPersonas.get(startKiller-1);
+        if (this.horario) {
+            try {
+                while (deadsNumber != this.size) {
+                    //System.out.println(personItr.getPosicion());
+                    Persona toKill = personItr.checkNextAlife(listaPersonas);
+                    toKill.kill();
+                    deadsNumber++;
+                    personItr = toKill.checkNextAlife(listaPersonas);
+                    this.charactersPane.update();
+                    sleep(milliseconds);
+                }
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
+        } else {
+            try {
+                while (deadsNumber != this.size) {
+                    //System.out.println(personItr.getPosicion());
+                    Persona toKill = personItr.checkLastAlife(listaPersonas);
+                    toKill.kill();
+                    deadsNumber++;
+                    personItr = toKill.checkLastAlife(listaPersonas);
+                    this.charactersPane.update();
+                    sleep(milliseconds);
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void setKillSense(int i) {
+        if (i == 1) {
+            this.horario = true;
+        } else if (i == -1) {
+            this.horario = false;
         }
     }
 
@@ -70,33 +101,34 @@ public class Circulo<E> extends Thread {
     }
 
     public Persona getNextAlive(Persona p) {
-        int c = p.getPosicion()+1;
+        int c = p.getPosicion();
         listaPersonas.setItr(c);
         Persona personItr = null;
-        while(c != p.getPosicion()){
-            personItr = listaPersonas.getNext();
-            if(personItr.isAlife() && !personItr.equals(p)){
+        while (c != p.getPosicion() - 1) {
+            personItr = listaPersonas.getNextE();
+            if (personItr.isAlife() && !personItr.equals(p)) {
                 listaPersonas.resetItr();
                 break;
             }
             c = personItr.getPosicion();
         }
+        System.out.println("Next found " + personItr.getPosicion());
         return personItr;
     }
 
-    public Persona gteLastAlive(Persona p) {
-        int c = p.getPosicion()-1;
-        listaPersonas.setItr(c);
-        Persona personItr = null;
-        while(c != p.getPosicion()){
-            personItr = listaPersonas.getLast();
-            if(personItr.isAlife() && !personItr.equals(p)){
-                listaPersonas.resetItr();
+    public Persona getLastAlive(Persona p) {
+        listaPersonas.setItr(p.getPosicion());
+        while (listaPersonas.hasPrevE()) {
+            Persona temp = listaPersonas.getPrevE();
+            System.out.print(temp.getPosicion() + " " + temp.isAlife() );
+            if (temp.equals(p)) {
                 break;
             }
-            c = personItr.getPosicion();
+            if (temp.isAlife()) {
+                return temp;
+            }
         }
-        return personItr;
+        return null;
     }
 
 }
