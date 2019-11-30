@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
  * @author danie
  * @param <E>
  */
+
 public class Circulo<E> extends Thread {
 
     private int size;
@@ -29,10 +30,10 @@ public class Circulo<E> extends Thread {
 
     public Circulo(int size) {
         startKiller = 0;
-        milliseconds = 500;
+        milliseconds = 1000;
         horario = true;
-        numerosPane = new CircularPane(340);
-        charactersPane = new CircularPane(300);
+        numerosPane = new CircularPane(365);
+        charactersPane = new CircularPane(330);
         //listaPersonas = new CircularDoublyLinkedList();
         this.size = size;
         this.threadRunning = false;
@@ -42,10 +43,9 @@ public class Circulo<E> extends Thread {
             listaPersonas.addLast(nPersona);
             numerosPane.getChildren().add(nPersona.getPosLabel());
             charactersPane.getChildren().add(nPersona.getCharacterImage());
+           
         }
     }
-    
-    
 
     public void setStartKiller(int posicion) {
         this.startKiller = posicion;
@@ -70,8 +70,6 @@ public class Circulo<E> extends Thread {
         } catch (Exception e) {
         }
     }
-    
-    
 
     @Override
     public void run() {
@@ -83,8 +81,8 @@ public class Circulo<E> extends Thread {
         if (this.horario) {
             try {
                 while (deadsNumber != this.size) {
-                    //System.out.println(personItr.getPosicion());
                     Persona toKill = personItr.checkNextAlife(listaPersonas);
+                    //personItr.mover(milliseconds, toKill);
                     toKill.kill();
                     deadsNumber++;
                     personItr = toKill.checkNextAlife(listaPersonas);
@@ -96,8 +94,8 @@ public class Circulo<E> extends Thread {
         } else {
             try {
                 while (deadsNumber != this.size) {
-                    //System.out.println(personItr.getPosicion());
                     Persona toKill = personItr.checkLastAlife(listaPersonas);
+                    //personItr.mover(milliseconds, toKill);
                     toKill.kill();
                     deadsNumber++;
                     personItr = toKill.checkLastAlife(listaPersonas);
@@ -111,14 +109,15 @@ public class Circulo<E> extends Thread {
     }
     
     public void increasteRunTime(){
-        this.milliseconds = this.milliseconds*2;
+        if(this.milliseconds < 2000){
+            this.milliseconds = this.milliseconds*2;
+        }
     }
     
     public void decreaseRunTime(){
-        if(this.milliseconds/2 != 0){
+        if(this.milliseconds > 125){
             this.milliseconds = this.milliseconds/2;
         }
-        
     }
 
     public void setKillSense(int i) {
@@ -144,36 +143,4 @@ public class Circulo<E> extends Thread {
     public CircularPane getCharactersPane() {
         return charactersPane;
     }
-
-    public Persona getNextAlive(Persona p) {
-        int c = p.getPosicion();
-        listaPersonas.setItr(c);
-        Persona personItr = null;
-        while (c != p.getPosicion() - 1) {
-            personItr = listaPersonas.getNextE();
-            if (personItr.isAlife() && !personItr.equals(p)) {
-                listaPersonas.resetItr();
-                break;
-            }
-            c = personItr.getPosicion();
-        }
-        System.out.println("Next found " + personItr.getPosicion());
-        return personItr;
-    }
-
-    public Persona getLastAlive(Persona p) {
-        listaPersonas.setItr(p.getPosicion());
-        while (listaPersonas.hasPrevE()) {
-            Persona temp = listaPersonas.getPrevE();
-            System.out.print(temp.getPosicion() + " " + temp.isAlife());
-            if (temp.equals(p)) {
-                break;
-            }
-            if (temp.isAlife()) {
-                return temp;
-            }
-        }
-        return null;
-    }
-
 }
