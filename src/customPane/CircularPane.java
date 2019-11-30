@@ -20,6 +20,7 @@ public class CircularPane extends Pane {
     public CircularPane(int radius){
         this.radius = radius;
     }
+    
     public void update(){
         layoutChildren();
     }

@@ -24,15 +24,19 @@ public class Circulo<E> extends Thread {
     private CircularDoublyLinkedList<Persona> listaPersonas = new CircularDoublyLinkedList();
     private boolean horario;
     private int startKiller;
+    private boolean threadRunning;
+    private boolean threadPaused;
 
     public Circulo(int size) {
         startKiller = 0;
         milliseconds = 500;
         horario = true;
-        numerosPane = new CircularPane(360);
-        charactersPane = new CircularPane(320);
+        numerosPane = new CircularPane(340);
+        charactersPane = new CircularPane(300);
         //listaPersonas = new CircularDoublyLinkedList();
         this.size = size;
+        this.threadRunning = false;
+        this.threadPaused = false;
         for (int i = 1; i <= size; i++) {
             Persona nPersona = new Persona(i);
             listaPersonas.addLast(nPersona);
@@ -41,16 +45,41 @@ public class Circulo<E> extends Thread {
         }
     }
     
-    public void setStartKiller(int posicion){
+    
+
+    public void setStartKiller(int posicion) {
         this.startKiller = posicion;
     }
 
+    public boolean isPaused() {
+        return this.threadPaused;
+    }
+
+    public void pause() {
+        this.threadPaused = true;
+        try {
+            this.suspend();
+        } catch (Exception e) {
+        }
+    }
+
+    public void resum() {
+        this.threadPaused = false;
+        try {
+            this.resume();
+        } catch (Exception e) {
+        }
+    }
+    
+    
+
     @Override
     public void run() {
+        this.threadRunning = true;
         System.out.println(this.horario);
         System.out.println("La simulacion ha empezado");
         int deadsNumber = 0;
-        Persona personItr = this.listaPersonas.get(startKiller-1);
+        Persona personItr = this.listaPersonas.get(startKiller - 1);
         if (this.horario) {
             try {
                 while (deadsNumber != this.size) {
@@ -78,6 +107,18 @@ public class Circulo<E> extends Thread {
             } catch (Exception e) {
             }
         }
+        this.threadRunning = false;
+    }
+    
+    public void increasteRunTime(){
+        this.milliseconds = this.milliseconds*2;
+    }
+    
+    public void decreaseRunTime(){
+        if(this.milliseconds/2 != 0){
+            this.milliseconds = this.milliseconds/2;
+        }
+        
     }
 
     public void setKillSense(int i) {
@@ -86,6 +127,10 @@ public class Circulo<E> extends Thread {
         } else if (i == -1) {
             this.horario = false;
         }
+    }
+
+    public boolean isRunnig() {
+        return this.threadRunning;
     }
 
     public int getSize() {
@@ -120,7 +165,7 @@ public class Circulo<E> extends Thread {
         listaPersonas.setItr(p.getPosicion());
         while (listaPersonas.hasPrevE()) {
             Persona temp = listaPersonas.getPrevE();
-            System.out.print(temp.getPosicion() + " " + temp.isAlife() );
+            System.out.print(temp.getPosicion() + " " + temp.isAlife());
             if (temp.equals(p)) {
                 break;
             }

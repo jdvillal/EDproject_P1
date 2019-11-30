@@ -33,7 +33,7 @@ public class EDproject_P1 extends Application {
 
         PaneOrganizer pn = new PaneOrganizer(primaryStage);
         pn.drawControlPane();
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Simulador");
 
     }
 
