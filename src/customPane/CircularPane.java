@@ -8,7 +8,6 @@ package customPane;
  *
  * @author danie
  */
-import java.util.List;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -31,8 +30,11 @@ public class CircularPane extends Pane {
         double degreese = 0;
         for (Node node : getChildren()) {
             double x = radius * Math.cos(Math.toRadians(degreese)) + getWidth() / 2;
+            
             double y = radius * Math.sin(Math.toRadians(degreese)) + getHeight() / 2;
             layoutInArea(node, x - node.getBoundsInLocal().getWidth() / 2, y - node.getBoundsInLocal().getHeight() / 2, getWidth(), getHeight(), 0.0, HPos.LEFT, VPos.TOP);
+            //System.out.println("x: " +(x - node.getBoundsInLocal().getWidth() / 2) +" y: " +  (y - node.getBoundsInLocal().getHeight() / 2));
+            //System.out.println(getWidth()+"  " + getHeight());
             degreese += increment;
         }
     } 

@@ -5,20 +5,8 @@
  */
 package ec.edu.espol.main;
 
-import customPane.CircularPane;
+
 import javafx.application.Application;
-
-import ec.edu.espol.List.List;
-import ec.edu.espol.SimplyLinkedList.LinkedList;
-
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -29,12 +17,9 @@ public class EDproject_P1 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        
-
         PaneOrganizer pn = new PaneOrganizer(primaryStage);
         pn.drawControlPane();
         primaryStage.setTitle("Simulador");
-
     }
 
     /**

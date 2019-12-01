@@ -7,34 +7,31 @@ package ec.edu.espol.main;
 
 import customPane.CircularPane;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 /**
  *
- * @author danie
+ * @author daniel
  * @param <E>
  */
 
 public class Circulo<E> extends Thread {
 
-    private int size;
+    private final int size;
     private int milliseconds;
-    private CircularPane numerosPane;
-    private CircularPane charactersPane;
-    private CircularDoublyLinkedList<Persona> listaPersonas = new CircularDoublyLinkedList();
+    private final CircularPane numerosPane;
+    private final CircularPane charactersPane;
+    private final CircularDoublyLinkedList<Persona> listaPersonas;
     private boolean horario;
     private int startKiller;
     private boolean threadRunning;
     private boolean threadPaused;
 
     public Circulo(int size) {
+        listaPersonas = new CircularDoublyLinkedList();
         startKiller = 0;
         milliseconds = 1000;
         horario = true;
         numerosPane = new CircularPane(365);
         charactersPane = new CircularPane(330);
-        //listaPersonas = new CircularDoublyLinkedList();
         this.size = size;
         this.threadRunning = false;
         this.threadPaused = false;
@@ -43,7 +40,6 @@ public class Circulo<E> extends Thread {
             listaPersonas.addLast(nPersona);
             numerosPane.getChildren().add(nPersona.getPosLabel());
             charactersPane.getChildren().add(nPersona.getCharacterImage());
-           
         }
     }
 
@@ -82,12 +78,15 @@ public class Circulo<E> extends Thread {
             try {
                 while (deadsNumber != this.size) {
                     Persona toKill = personItr.checkNextAlife(listaPersonas);
-                    //personItr.mover(milliseconds, toKill);
-                    toKill.kill();
+                    personItr.turnAsassin();
+                    toKill.turnVictim();
                     deadsNumber++;
-                    personItr = toKill.checkNextAlife(listaPersonas);
                     this.charactersPane.update();
                     sleep(milliseconds);
+                    toKill.kill();
+                    personItr.turnNormal();
+                    this.charactersPane.update();
+                    personItr = toKill.checkNextAlife(listaPersonas);
                 }
             } catch (Exception e) {
             }
@@ -95,12 +94,15 @@ public class Circulo<E> extends Thread {
             try {
                 while (deadsNumber != this.size) {
                     Persona toKill = personItr.checkLastAlife(listaPersonas);
-                    //personItr.mover(milliseconds, toKill);
-                    toKill.kill();
+                    personItr.turnAsassin();
+                    toKill.turnVictim();
                     deadsNumber++;
-                    personItr = toKill.checkLastAlife(listaPersonas);
                     this.charactersPane.update();
                     sleep(milliseconds);
+                    toKill.kill();
+                    personItr.turnNormal();
+                    this.charactersPane.update();
+                    personItr = toKill.checkLastAlife(listaPersonas);
                 }
             } catch (Exception e) {
             }

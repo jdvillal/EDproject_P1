@@ -5,38 +5,77 @@
  */
 package ec.edu.espol.main;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
+import java.util.HashMap;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
 /**
- *
- * @author danie
+ * @author daniel
  */
-public class Persona {
 
-    private final Image imAlife = new Image(getClass().getResourceAsStream("alife.png"));
-    private final Image imDead = new Image(getClass().getResourceAsStream("dead.png"));
-    private ImageView currentImv = new ImageView(imAlife);
-    private Label posicionLbl;
+public class Persona {
+    
+    private HashMap<String,Image> imagenes;
+    private String personaje;
+    private String asesino;
+    private String muerto;
+    
+    private  ImageView currentImv;
+    private final Label posicionLbl;
     private boolean vivo;
     private Integer posicion;
 
     public Persona(int posicion) {
-        this.currentImv.setImage(imAlife);
+        this.imagenes = new HashMap<>();
+        
+        this.imagenes.put("happy", new Image(getClass().getResourceAsStream("happy.png")));
+        this.imagenes.put("smile", new Image(getClass().getResourceAsStream("smile.png")));
+        this.imagenes.put("jason", new Image(getClass().getResourceAsStream("jason.png")));
+        this.imagenes.put("muerte", new Image(getClass().getResourceAsStream("muerte.png")));
+        this.imagenes.put("ninja", new Image(getClass().getResourceAsStream("ninja.png")));
+        this.imagenes.put("fantasma", new Image(getClass().getResourceAsStream("fantasma.png")));
+        this.imagenes.put("tiza", new Image(getClass().getResourceAsStream("tiza.png")));
+        this.imagenes.put("lapida", new Image(getClass().getResourceAsStream("lapida.png")));
+        this.imagenes.put("skull", new Image(getClass().getResourceAsStream("skull.png")));
+        this.imagenes.put("espantado", new Image(getClass().getResourceAsStream("espantado.png")));
+        
+        this.personaje = "happy";
+        this.asesino = "muerte";
+        this.muerto = "lapida";
+        
+        currentImv = new ImageView(this.imagenes.get(this.personaje));
         currentImv.setScaleX(0.5);
         currentImv.setScaleY(0.5);
         this.vivo = true;
         this.posicion = posicion;
         posicionLbl = new Label(String.valueOf(this.posicion));
     }
+    
+    public void turnAsassin(){
+        this.currentImv.setImage(this.imagenes.get(this.asesino));
+    }
+    public void turnVictim(){
+        this.currentImv.setImage(this.imagenes.get("espantado"));
+    }
+    public void turnNormal(){
+        System.out.println(this.personaje);
+        this.currentImv.setImage(this.imagenes.get(this.personaje));
+    }
+    
+    public void setPersonajeImage(String imName){
+        this.personaje = imName;
+    }
+    
+    public void setAssasingImage(String imName){
+        this.asesino = imName;
+    }
+    
+    public void setMuertoImage(String imName){
+        this.muerto = imName;
+    }
+        
+        
 
     public ImageView getCharacterImage() {
         return this.currentImv;
@@ -63,7 +102,7 @@ public class Persona {
     }
 
     public void kill() {
-        this.currentImv.setImage(imDead);
+        this.currentImv.setImage(this.imagenes.get(this.muerto));
         this.vivo = false;
     }
 
@@ -87,39 +126,6 @@ public class Persona {
             }
         }
         return null;
-    }
-    
-    public void setXY(int radio, int dregrees){
-    
-    }
-
-    public void mover(int milliseconds, Persona p) {
-        double thisPosX = this.currentImv.xProperty().doubleValue();
-        System.out.println(thisPosX);
-        double thisPosY = this.currentImv.yProperty().doubleValue();
-        System.out.println(thisPosY);
-        double tokillPosX = p.getCharacterImage().xProperty().doubleValue();
-        System.out.println(tokillPosX);
-        double tokillPosY = p.getCharacterImage().yProperty().doubleValue();
-        System.out.println(tokillPosX);
-        Duration inicio = Duration.ZERO;
-        Duration fin = Duration.millis(milliseconds);
-
-        KeyValue kvInicioX = new KeyValue(this.currentImv.translateXProperty(), thisPosX);
-        KeyValue kvFinalX = new KeyValue(this.currentImv.translateXProperty(), tokillPosX);
-        KeyValue kvInicioY = new KeyValue(this.currentImv.translateYProperty(), thisPosY);
-        KeyValue kvFinalY = new KeyValue(this.currentImv.translateYProperty(), tokillPosY);
-
-        KeyFrame kfInicioX = new KeyFrame(inicio, kvInicioX);
-        KeyFrame kfFinalX = new KeyFrame(fin, kvFinalX);
-        KeyFrame kfInicioY = new KeyFrame(inicio, kvInicioY);
-        KeyFrame kfFinalY = new KeyFrame(fin, kvFinalY);
-
-        Timeline lineaTiX = new Timeline(kfInicioX, kfFinalX);
-        Timeline lineaTiY = new Timeline(kfInicioY, kfFinalY);
-
-        lineaTiX.play();
-        lineaTiY.play();
     }
 
 }
