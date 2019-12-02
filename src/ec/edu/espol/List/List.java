@@ -1,27 +1,26 @@
 package ec.edu.espol.List;
 
-/**
- *
- * @author Jorge Villalta
- * @param <E>
- */
+public interface List<E> extends Iterable{
 
+    public boolean addFirst(E e); // inserta el elemento e al inicio
 
-public interface List <E> extends Iterable<E>{
-   boolean addFirst(E element);
-   boolean addLast(E element);
-   boolean removeFirst();
-   boolean removeLast();
-   E getFirst();
-   
-   E getLast();
-   boolean insert(int index, E element);
-   boolean contains(E element);
-   E get(int index);
-   int indexOf(E element);
-   boolean isEmpty();
-   E remove(int index);
-   boolean remove(E element);
-   E set(int index, E element);
-   int size();
+    public boolean addLast(E e); // inserta el elemento e al final
+
+    public boolean add(int index, E element);
+
+    public E remove(int index);
+
+    public E get(int index);
+
+    public E set(int index, E element);
+
+;    public int size();
+
+    public boolean isEmpty();
+
+    public void clear();
+
+    @Override
+    public String toString();
+
 }

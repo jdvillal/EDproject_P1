@@ -1,162 +1,164 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ec.edu.espol.ArrayList;
+
 import ec.edu.espol.List.List;
 import java.util.Iterator;
 
 /**
  *
- * @author Jorge Villalta
- * @param <E>
+ * @author jorgevillalta
  */
-public class ArrayList<E> implements List<E>{
-    private E[] array;
-    private int capacity = 10;
-    private int effectiveSize;
-    
-    public ArrayList(){ //Todas las TDA van a inicializar vacias
-        //No se puede hacer new de E directamente, por ello hay que hacer casting 
-        array = (E[]) new Object[capacity];    
-        effectiveSize = 0;
+public class ArrayList<E> implements List<E> {
+    private int capacity = 100;
+    private int size = 0;
+    private E[] elements = (E[]) new Object[capacity];;
+
+    public ArrayList() {
     }
     
-    @Override
-    public boolean addFirst(E element) {
-        if(element == null){
-            return false;
-        }else if(isEmpty()){
-            array[effectiveSize ++] = element;
-            return true;
-        }else if (capacity == effectiveSize){
-            addCapacity();
-        }
-        for(int i = effectiveSize -1 ; i >= 0; i-- ){
-            array[i+1] = array[i];
-        }
-        
-        
-        array [0] = element;
-        effectiveSize++;
-        return true;   
-    }
-    
-    @Override
-    public boolean addLast(E element) {
-        if(element == null){
-            return false;
-        }else if(effectiveSize == capacity){
-            addCapacity();
-        }
-        array[effectiveSize++] = element;
-        return true;
-    }
-    
+    //Se crea un arrego estatico nuevo en caso de que el arreglo elements actual llegue a su limite.
     private void addCapacity(){
-        E[] tmp = (E[]) new Object [capacity*2];
-        for(int i = 0; i < capacity; i++){
-            tmp[i] = array[i];
+        this.capacity = this.capacity * 2;
+        E tempArray[] = (E[]) new Object[this.capacity];
+        for(int i = 0; i < this.size; i++){
+            tempArray[i] = this.elements[i];
         }
-        array = tmp;
-        capacity = capacity*2;
+        this.elements = tempArray;
     }
     
+    //Metodo para agregar elementos en el inicio de la lista
     @Override
-    public E getFirst() {
-        return array[0];
+    public boolean addFirst(E e) {
+        if(e == null){
+            return false;
+        }else{
+            if(this.size == this.capacity){
+                addCapacity();
+            }
+            for(int i = size; i > 0; i--){
+                this.elements[i] = this.elements[i-1];
+            }
+            this.elements[0] = e;
+            size = size + 1;
+            return true;
+        }
     }
 
+    //Metodo para agregar elementos al final de la lista
     @Override
-    public E getLast() {
-        return array[effectiveSize -1];
+    public boolean addLast(E e) {
+        if(e == null){
+            return false;
+        }else{
+            if(this.size == this.capacity){
+                addCapacity();
+            }
+            this.elements[size] = e;
+            size = size + 1;
+            return true;
+        }
     }
 
+    //Metodo par agregar elementos en el indice especificado
     @Override
-    public boolean isEmpty() {
-        return effectiveSize == 0;
+    public boolean add(int index, E element) {
+        if(element == null){
+            return false;
+        }else{
+            if(this.size == this.capacity){
+                addCapacity();
+            }
+            int i = size;
+            while(i > index){
+                this.elements[i] = this.elements[i-1];
+                i = i-1;
+            }
+            this.elements[index] = element;
+            size = size + 1;
+            return true;
+        } 
     }
 
+    //Metodo para remover elementos en el indice especificado
+    @Override
+    public E remove(int index) {
+        E borrado = this.elements[index];
+        for(int i = index; i < size; i++){
+            this.elements[i] = this.elements[i+1];
+        }
+        this.size = this.size - 1;
+        return borrado;
+    }
 
+    //Metodo para obtener el elemento en el indice especificado
     @Override
     public E get(int index) {
-        if(effectiveSize == 0 || index < 0 || index >= effectiveSize){
-            return null;
-        }
-        return array[index];
+        return this.elements[index];
     }
+
+    //Metodo para reemplazar un elemento en el indice especificado
+    @Override
+    public E set(int index, E element) {
+        E seteado = this.elements[index];
+        this.elements[index] = element;
+        return seteado;
+    }
+
+    //Metodo que devuelve el numero de elementos en la lista
+    @Override
+    public int size() {
+        return this.size;
+    }
+
+    //Metodo para saber si la lista está vacía
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    //Metodo para remover todos los elementos de la lista
+    @Override
+    public void clear() {
+        this.capacity = 100;
+        this.size = 0;
+        this.elements = (E[]) new Object[capacity];
+    }
+    
     
     @Override
     public String toString(){
-        //return "Implemente este método!";
-        String str =  null;
-        for(int i = 0; i< effectiveSize; i++){
+        String str = "";
+        for(int i = 0; i < size; i++){
+            String cs = this.elements[i].toString();
             if(i == 0){
-                str = array[i].toString();
+                str = cs;
             }else{
-                str = str + "," + array[i].toString();
+                str = str + "," +cs;
             }
+ 
         }
-        return str;
+        return "["+str+"]";
     }
-
-    @Override
-    public boolean removeFirst() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeLast() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean insert(int index, E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean contains(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int indexOf(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E remove(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean remove(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E set(int index, E element) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        this.array[index] = element;
-        return element;
-    }
-
-    @Override
-    public int size() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        return this.effectiveSize;
-    }
-
+    
+    //Iterador de la lista para los bucles for each
     @Override
     public Iterator<E> iterator() {
             return  new Iterator<E>(){
             int pos = 0;
             @Override
             public boolean hasNext(){
-                return pos < effectiveSize;
+                return pos < size;
             }
             @Override
             public E next(){
-                return array[pos++]; 
+                return elements[pos++]; 
             }
         };
     }
+    
     
 }

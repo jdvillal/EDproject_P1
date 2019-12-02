@@ -5,24 +5,30 @@
  */
 package ec.edu.espol.main;
 
+import ec.edu.espol.ArrayList.ArrayList;
+import java.util.Iterator;
+
 /**
  *
- * @author danie
+ * @author daniel
  * @param <E>
  */
-public class CircularDoublyLinkedList<E> {
-    private Node<E> head;
-    private Node<E> tail;
+
+public class CircularDoublyLinkedList<E> implements Iterable<E>{
+    private Node<E> head;//Elemento que encabeza la lista
+    private Node<E> tail;//Elemento en la ultima posicion de la lista
     private Node<E> location;
-    private Node<E> iteratorNode;
-    private int numElements;
-    private boolean found;
+    private Node<E> iteratorNode;//Nodo para iterar circularmente sobre la lista
+    private ArrayList<E> iteratorList;//ArrayList para iterar sobre la lista considerando un inicio y un fin
+    private int numElements; //Numero de elementos en la lista
+    private boolean found; 
 
     public CircularDoublyLinkedList(){
         head = null;
         tail = null;
         numElements = 0;
         location = null;
+        this.iteratorList = new ArrayList<E>();
     }
 
     public boolean isEmpty(){
@@ -41,8 +47,7 @@ public class CircularDoublyLinkedList<E> {
         found = false;
         if (!isEmpty()) {
             do {
-                if (location.getData().equals(target)) // if they match
-                {
+                if (location.getData().equals(target)){
                     found = true;
                     return;
                 } else {
@@ -75,9 +80,7 @@ public class CircularDoublyLinkedList<E> {
 
     }
 
-    public E get(E data) // Returns an element e from this list such that e.equals(element);
-    // if no such element exists, returns null.
-    {
+    public E get(E data) {
         find(data);
         if (found) {
             return location.getData();
@@ -86,9 +89,7 @@ public class CircularDoublyLinkedList<E> {
         }
     }
 
-    public void reset() // Initializes current position for an iteration through this list,
-    // to the first element on this list.
-    {
+    public void reset(){
         location = head;
     }
 
@@ -113,7 +114,8 @@ public class CircularDoublyLinkedList<E> {
     }
 
     public void addFirst(E data){
-        Node<E> newNode = new Node<E>(data);   // Reference to the new node being added
+        Node<E> newNode = new Node<E>(data);
+        this.iteratorList.addFirst(data);
         if (isEmpty()) {
             head = newNode;
             tail = newNode;
@@ -132,6 +134,7 @@ public class CircularDoublyLinkedList<E> {
 
     public void addLast(E data){
         Node<E> newNode = new Node<E>(data);
+        this.iteratorList.addLast(data);
         if (isEmpty()){
             head = newNode;
             tail = newNode;
@@ -151,7 +154,6 @@ public class CircularDoublyLinkedList<E> {
     public void add(E data, int position) //adds new element to the specified position
     {
         Node<E> newNode = new Node<E>(data);
-
         if (isEmpty()) {
             // add element to an empty list
             head = newNode;
@@ -345,5 +347,13 @@ public class CircularDoublyLinkedList<E> {
         this.iteratorNode = this.iteratorNode.getNext();
         return temp.getData();
     }
+
+    @Override
+    public Iterator<E> iterator() {
+        return this.iteratorList.iterator();
+    }
+    
+    
+
 
 }

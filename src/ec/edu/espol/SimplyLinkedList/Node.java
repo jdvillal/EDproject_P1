@@ -7,30 +7,37 @@ package ec.edu.espol.SimplyLinkedList;
 
 /**
  *
- * @author Jorge Villalta
+ * @author jorgevillalta
+ * @param <E>
  */
 public class Node<E> {
-    private E data;
-    private Node<E> next;
-    
-    public Node(E data){
-        this.data = data;
-        this.next = null;
+    private E content;//Contenido del nodo
+    private Node<E> next;//Referencia al siguiente nodo
+
+    public Node(E element, Node<E> e) {
+        this.content = element;
+        this.next = e;
     }
 
-    public E getData() {
-        return data;
-    }
-
-    public void setData(E data) {
-        this.data = data;
+    public E getContent() {
+        return content;
     }
 
     public Node<E> getNext() {
         return next;
     }
 
+    public void setContent(E content) {
+        this.content = content;
+    }
+
     public void setNext(Node<E> next) {
         this.next = next;
-    } 
+    }
+    
+
+    
+    
+    
+    
 }
